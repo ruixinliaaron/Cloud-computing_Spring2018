@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:fragment="header">
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="description" content="CSYE 6225"/>
+        <meta name="author" content="t.parikh@northeastern.edu"/>
+        <title>CSYE 6225 - Spring 2018 Cloud Native Webapp</title>
+        <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+              crossorigin="anonymous"/>
+        <link rel="stylesheet" type="text/css" href="http://ianlunn.github.io/Hover/css/hover.css"/>
+        <style>
+            body {
+                padding-top: 70px;
+                /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+            }
+             *{/* Basic CSS reset*/margin:0;padding:0;}
+            .drop a:link, .drop a:visited{color:#202020;text-decoration:none;float:left;height:3.5em;overflow:hidden;}
+            .drop span{background:#fff;display:inline-block;line-height:3em;padding:0 1em;margin-top:0.5em;position:relative;-webkit-transition: background-color 0.2s, margin-top 0.2s;/* Saf3.2+, Chrome*/-moz-transition: background-color 0.2s, margin-top 0.2s;/* FF4+*/-ms-transition: background-color 0.2s, margin-top 0.2s;/* IE10*/-o-transition: background-color 0.2s, margin-top 0.2s;/* Opera 10.5+*/transition: background-color 0.2s, margin-top 0.2s;}
+            .drop a:hover span{background:#202020;margin-top:0;color:#ffffff;}
+            .drop span:before{content: "";position:absolute;top:3em;left:0;border-right:0.5em solid #9B8651;border-bottom:0.5em solid #fff;}
+            .drop span:after{content: "";position:absolute;top:3em;right:0;border-left:0.5em solid #9B8651;border-bottom:0.5em solid #fff;}
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                padding-top: 25px;
+                width:100px;
+            }
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+        </style>
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </div>
+</head>
+<body>
+</body>
+</html>

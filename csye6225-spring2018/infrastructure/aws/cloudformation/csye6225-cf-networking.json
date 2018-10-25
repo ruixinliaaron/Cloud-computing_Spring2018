@@ -1,0 +1,236 @@
+{
+
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Sample CloudFormation Template for CSYE 6225 - Spring 2018",
+
+    "Parameters" : {
+        "stackName":{
+            "Type":"String"
+        }
+    },
+
+    "Resources": {
+        "vpc" : {
+            "Type" : "AWS::EC2::VPC",
+            "Properties" : {
+               "CidrBlock" : "10.0.0.0/16",
+               "EnableDnsSupport" : "true",
+               "EnableDnsHostnames" : "true",
+               "InstanceTenancy" : "default",
+               "Tags": [
+                 {
+                   "Key": "Name",
+                   "Value": {"Fn::Join": ["",[{"Ref": "AWS::StackName"},"-csye6225-vpc"]]}
+                 }
+               ]
+            }
+         },
+         "InternetGateway" : {
+            "Type" : "AWS::EC2::InternetGateway",
+            "Properties" : {
+              "Tags": [
+                {
+                  "Key": "Name",
+                  "Value": {"Fn::Join": ["",[{"Ref": "AWS::StackName"},"-csye6225-internetGateway"]]}
+                }
+              ]
+            }
+         },
+         "AttachGateway" : {
+            "Type" : "AWS::EC2::VPCGatewayAttachment",
+            "Properties" : {
+               "VpcId" : { "Ref" : "vpc" },
+               "InternetGatewayId" : { "Ref" : "InternetGateway" }
+            }
+         },
+         "publicRouteTable" : {
+            "Type" : "AWS::EC2::RouteTable",
+            "Properties" : {
+               "VpcId" : { "Ref" : "vpc" },
+               "Tags": [
+                {
+                  "Key": "Name",
+                  "Value": {"Fn::Join": ["",[{"Ref": "AWS::StackName"},"-csye6225-public-route-table"]]}
+                }
+              ]
+            }
+        },
+        "myRoute" : {
+            "Type" : "AWS::EC2::Route",
+            "Properties" : {
+               "RouteTableId" : { "Ref" : "publicRouteTable" },
+               "DestinationCidrBlock" : "0.0.0.0/0",
+               "GatewayId" : { "Ref" : "InternetGateway" }
+            }
+        },
+        "privateRouteTable" : {
+            "Type" : "AWS::EC2::RouteTable",
+            "Properties" : {
+               "VpcId" : { "Ref" : "vpc" },
+               "Tags": [
+                {
+                  "Key": "Name",
+                  "Value": {"Fn::Join": ["",[{"Ref": "AWS::StackName"},"-csye6225-private-route-table"]]}
+                }
+              ]
+            }
+        },
+        "webSubnet" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+               "VpcId" : { "Ref" : "vpc" },
+               "CidrBlock" : "10.0.0.0/24",
+               "AvailabilityZone" : "us-east-1a",
+               "MapPublicIpOnLaunch": "true",
+               "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": {"Fn::Join": ["",[{"Ref": "AWS::StackName"},"-csye6225-webSubnet"]]}
+                }
+                ]
+            }
+        },
+        "webSubnet1" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+               "VpcId" : { "Ref" : "vpc" },
+               "CidrBlock" : "10.0.1.0/24",
+               "AvailabilityZone" : "us-east-1b",
+               "MapPublicIpOnLaunch": "true",
+               "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": {"Fn::Join": ["",[{"Ref": "AWS::StackName"},"-csye6225-webSubnet1"]]}
+                }
+                ]
+            }
+        },
+        "dbSubnet" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+               "VpcId" : { "Ref" : "vpc" },
+               "CidrBlock" : "10.0.2.0/24",
+               "AvailabilityZone" : "us-east-1b",
+               "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": {"Fn::Join": ["",[{"Ref": "AWS::StackName"},"-csye6225-dbSubnet"]]}
+                }
+                ]
+            }
+        },
+        "webSubnetRouteTableAssociation" : {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties" : {
+               "SubnetId" : { "Ref" : "webSubnet" },
+               "RouteTableId" : { "Ref" : "publicRouteTable" }
+            }
+        },
+        "webSubnet1RouteTableAssociation" : {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties" : {
+               "SubnetId" : { "Ref" : "webSubnet1" },
+               "RouteTableId" : { "Ref" : "publicRouteTable" }
+            }
+        },
+        "dbSubnetRouteTableAssociation" : {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties" : {
+               "SubnetId" : { "Ref" : "dbSubnet" },
+               "RouteTableId" : { "Ref" : "privateRouteTable" }
+            }
+        },
+        "csye6225webapp": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "security group for ec2",
+                "VpcId" : { "Ref" : "vpc" },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8080",
+                        "ToPort": "8080",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "csye6225-webapps"
+                    }
+                ]
+            }
+        },
+        "LoadBalancerSecurityGroup":{
+          "Type":"AWS::EC2::SecurityGroup",
+          "Properties":{
+            "GroupName": "ALB_SG",
+            "GroupDescription":"enable HTTP access 80 and ssh access 22",
+            "VpcId":{
+              "Ref":"vpc"
+            },
+            "SecurityGroupIngress":[
+              {
+                "IpProtocol": "tcp",
+                "FromPort": "443",
+                "ToPort": "443",
+                "CidrIp": "0.0.0.0/0"
+              },
+              {
+                "IpProtocol": "tcp",
+                "FromPort": "80",
+                "ToPort": "80",
+                "CidrIp": "0.0.0.0/0"
+              }
+            ],
+            "SecurityGroupEgress":[
+              {
+                "IpProtocol": "tcp",
+                "FromPort": "8080",
+                "ToPort": "8080",
+                "DestinationSecurityGroupId":{
+                  "Fn::GetAtt":[
+                    "csye6225webapp",
+                    "GroupId"
+                    ]
+                }
+              }
+            ]
+          }
+        }
+    },
+    "Outputs":{
+      "LoadBalancerSecurityGroupId":{
+        "Description": "the id of loadbalancer security group",
+        "Value" : {"Ref" : "LoadBalancerSecurityGroup"},
+        "Export" : {
+          "Name" : "csye6225-cloud-networking-loadbalancer-SecurityGroup"
+        }
+      },
+      "webSubnet1":{
+        "Description":"the id of web subnet1",
+        "Value":{"Ref":"webSubnet1"},
+        "Export":{
+          "Name" :"csye6225-cloud-networking-webSubnet1"
+        }
+      }
+    }
+}

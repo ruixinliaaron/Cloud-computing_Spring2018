@@ -1,0 +1,24 @@
+language: java
+jdk:
+- oraclejdk8
+
+sudo: false
+install: true
+
+before_deploy:
+- cd ruixinliaaron/csye6225-spring2018-master
+- chmod +x gradlew
+
+script:
+- cd webapp
+- ./gradlew build
+- ./gradlew war
+- ./gradlew test
+
+notifications:
+ email:
+    recipients:
+    - li.ruix@husky.neu.edu
+    on_success: always
+    on_failure: always
+

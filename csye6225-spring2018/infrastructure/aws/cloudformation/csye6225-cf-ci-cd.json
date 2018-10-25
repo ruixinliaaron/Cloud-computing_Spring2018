@@ -1,0 +1,271 @@
+{
+<<<<<<< HEAD
+   "AWSTemplateFormatVersion": "2010-09-09",
+   "Resources": {
+      "RootRole1": {
+         "Type": "AWS::IAM::Role",
+         "Properties": {
+            "AssumeRolePolicyDocument": {
+               "Version" : "2012-10-17",
+               "Statement": [ {
+                 "Action":[
+                   "iam:PassRole",
+                   "iam:ListInstanceProfiles",
+                   "ec2:*"
+                 ],
+                  "Effect": "Allow",
+                  "Resource":["*"],
+               } ]
+            },
+         }
+      },
+      "RootRole2": {
+         "Type": "AWS::IAM::Role",
+         "Properties": {
+            "AssumeRolePolicyDocument": {
+               "Version" : "2012-10-17",
+               "Statement": [ {
+                 "Action":[
+                   "codedeploy:CreateDeployment",
+                   "codedeploy:GetDeploymentConfig",
+                   "codedeploy:DeleteDeploymentGroup"
+                 ],
+                  "Effect": "Allow",
+                  "Resource":["*"],
+               } ]
+            },
+         }
+      },
+      "Policy1":{
+        "Type" : "AWS::IAM::Policy",
+        "Properties" : {
+          "PolicyName" : "ec2policy",
+          "PolicyDocument" : {
+            "Version" : "2012-10-17",
+            "Statement": [ {
+              "Effect"   : "Allow",
+              "Action"   : [
+
+              ],
+              "Resource" : "*"
+              } ]
+            },
+      "Groups" : [ { "Ref" : "CFNUserGroup" } ]
+   }
+},
+"S3Bucket": {
+    "Type": "AWS::S3::Bucket",
+    "Properties": {
+        "BucketName" : { "Fn::Join" : ["", [ "s3.","csye6225-spring2018-liruix.me"]]}
+    }
+}
+   }
+}
+=======
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Sample CloudFormation Template for CSYE 6225 - Spring 2018",
+
+    "Parameters" : {
+        "stackName":{
+            "Type":"String"
+        }
+    },
+
+    "Resources": {
+        "TravisUploadToS3" : {
+            "Type" : "AWS::IAM::ManagedPolicy",
+            "Properties" : {
+                "PolicyDocument" : {
+                    "Version": "2012-10-17",
+                    "Statement": [{
+                        "Effect": "Allow",
+                        "Action": [
+                            "s3:PutObject"
+                        ],
+                        "Resource": [
+                            "*"
+                        ]
+                    }]
+                }
+            }
+        },
+        "TravisCodeDeploy" : {
+            "Type" : "AWS::IAM::ManagedPolicy",
+            "Properties" : {
+                "PolicyDocument" : {
+                    "Version": "2012-10-17",
+                    "Statement": [{
+                        "Effect": "Allow",
+                        "Action": [
+                            "codedeploy:RegisterApplicationRevision",
+                            "codedeploy:GetApplicationRevision",
+                            "codedeploy:CreateDeployment",
+                            "codedeploy:GetDeployment",
+                            "codedeploy:GetDeploymentConfig"
+                        ],
+                        "Resource": [
+                            "*"
+                        ]
+                    }]
+                }
+            }
+        },
+
+        "csye6225codedeploy": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+               "AssumeRolePolicyDocument": {
+                    "Version" : "2012-10-17",
+                    "Statement": [ {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [ "codedeploy.amazonaws.com" ]
+                        },
+                        "Action": [ "sts:AssumeRole" ]
+                    } ]
+                },
+               "Path": "/",
+               "Policies": [{
+                    "PolicyName": "codedeploy",
+                    "PolicyDocument": {
+                        "Version" : "2012-10-17",
+                        "Statement": [
+                            {
+                                "Action": "ec2:*",
+                                "Effect": "Allow",
+                                "Resource": "*"
+                            },
+                            {
+                                "Effect": "Allow",
+                                "Action": "elasticloadbalancing:*",
+                                "Resource": "*"
+                            },
+                            {
+                                "Effect": "Allow",
+                                "Action": "cloudwatch:*",
+                                "Resource": "*"
+                            },
+                            {
+                                "Effect": "Allow",
+                                "Action": "autoscaling:*",
+                                "Resource": "*"
+                            },
+                            {
+                                "Effect": "Allow",
+                                "Action": "iam:CreateServiceLinkedRole",
+                                "Resource": "*",
+                                "Condition": {
+                                    "StringEquals": {
+                                        "iam:AWSServiceName": [
+                                            "autoscaling.amazonaws.com",
+                                            "ec2scheduled.amazonaws.com",
+                                            "elasticloadbalancing.amazonaws.com",
+                                            "spot.amazonaws.com",
+                                            "spotfleet.amazonaws.com"
+                                        ]
+                                    }
+                                }
+                            },
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "autoscaling:CompleteLifecycleAction",
+                                    "autoscaling:DeleteLifecycleHook",
+                                    "autoscaling:DescribeAutoScalingGroups",
+                                    "autoscaling:DescribeLifecycleHooks",
+                                    "autoscaling:PutLifecycleHook",
+                                    "autoscaling:RecordLifecycleActionHeartbeat",
+                                    "autoscaling:CreateAutoScalingGroup",
+                                    "autoscaling:UpdateAutoScalingGroup",
+                                    "autoscaling:EnableMetricsCollection",
+                                    "autoscaling:DescribeAutoScalingGroups",
+                                    "autoscaling:DescribePolicies",
+                                    "autoscaling:DescribeScheduledActions",
+                                    "autoscaling:DescribeNotificationConfigurations",
+                                    "autoscaling:DescribeLifecycleHooks",
+                                    "autoscaling:SuspendProcesses",
+                                    "autoscaling:ResumeProcesses",
+                                    "autoscaling:AttachLoadBalancers",
+                                    "autoscaling:PutScalingPolicy",
+                                    "autoscaling:PutScheduledUpdateGroupAction",
+                                    "autoscaling:PutNotificationConfiguration",
+                                    "autoscaling:PutLifecycleHook",
+                                    "autoscaling:DescribeScalingActivities",
+                                    "autoscaling:DeleteAutoScalingGroup",
+                                    "ec2:DescribeInstances",
+                                    "ec2:DescribeInstanceStatus",
+                                    "ec2:TerminateInstances",
+                                    "tag:GetTags",
+                                    "tag:GetResources",
+                                    "sns:Publish",
+                                    "cloudwatch:DescribeAlarms",
+                                    "cloudwatch:PutMetricAlarm",
+                                    "elasticloadbalancing:DescribeLoadBalancers",
+                                    "elasticloadbalancing:DescribeInstanceHealth",
+                                    "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                                    "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                                    "elasticloadbalancing:DescribeTargetGroups",
+                                    "elasticloadbalancing:DescribeTargetHealth",
+                                    "elasticloadbalancing:RegisterTargets",
+                                    "elasticloadbalancing:DeregisterTargets"
+                                ],
+                                "Resource": "*"
+                            }
+                        ]
+                    }
+                }]
+            }
+        },
+        "RootInstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+               "Path": "/",
+               "Roles": [ {
+                  "Ref": "csye6225codedeploy"
+               } ]
+            }
+        },
+
+        "RecordServiceS3Bucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "BucketName" : { "Fn::Join" : ["", [ "code-deploy.","csye6225-spring2018-liruix.me"]]}
+            }
+        },
+
+        "CodeDeployApplication": {
+            "Type" : "AWS::CodeDeploy::Application",
+            "Properties" : {
+              "ApplicationName" : "webapp",
+              "ComputePlatform" : "Server"
+            }
+
+        },
+
+        "DeploymentGroup":{
+            "Type" : "AWS::CodeDeploy::DeploymentGroup",
+            "Properties" : {
+                "ApplicationName" : "webapp",
+                "DeploymentGroupName" : "webapp_group",
+                "DeploymentStyle": {
+                    "DeploymentType":  "IN_PLACE",
+                    "DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
+                },
+                "Ec2TagFilters":[{
+                    "Key" :"asgtag1",
+                    "Type" : "KEY_AND_VALUE",
+                    "Value" : "asgtag1"
+                }],
+                "ServiceRoleArn": {  "Fn::GetAtt": ["csye6225codedeploy","Arn"] }
+            }
+        }
+
+
+
+    }
+
+}
+<<<<<<< HEAD
+>>>>>>> assignment06
+=======
+>>>>>>> assignment09

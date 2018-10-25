@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments/header :: header"/>
+<head>
+    <script>
+        function show(){
+            var date = new Date();
+            var now = "";
+            now = date.getFullYear()+".";
+            now = now + (date.getMonth()+1)+".";
+            now = now + date.getDate()+"  ";
+            var hour="0"+date.getHours();
+            var minute="0"+date.getMinutes();
+            var second="0"+date.getSeconds();
+            now = now + hour.substring(minute.length-2,minute.length)+":";
+            now = now + minute.substring(minute.length-2,minute.length)+":";
+            now = now + second.substring(second.length-2,second.length);
+
+            document.getElementById("nowDiv").innerHTML = now;
+            setTimeout("show()",1000);
+        }
+    </script>
+</head>
+<body onload="show()">
+<div th:replace="fragments/navigation :: navigation"/>
+
+
+<!-- Page Content -->
+<div class="container">
+    <p>
+        Welcome to CSYE 6225 Spring 2018 Semester!!!Final presentation
+    </p>
+    <div th:if="${flag}">
+    <div >
+        <h3 th:text="'Welcome,'+${name}"></h3>
+    </div>
+    </div>
+    <div>
+        <p th:text="${errmessage}"></p>
+    </div>
+
+</div>
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"/>
+</body>
+</html>
+
+
+
+

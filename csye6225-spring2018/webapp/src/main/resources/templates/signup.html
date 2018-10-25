@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Signup</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="https://github.com/FortAwesome/Font-Awesome/blob/master/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"/>
+    <link href="http://demo.cssmoban.com/cssthemes2/tpmo_418_pack/css/templatemo_style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div class="container">
+    <div class="col-md-12">
+        <form class="form-horizontal templatemo-login-form-2" role="form" action="/signupPost" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1>Signup Form</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="templatemo-one-signin col-md-12">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="username" class="control-label">Username</label>
+                            <div class="templatemo-input-icon-container">
+                                <i class="fa fa-user"></i>
+                                <input type="email" class="form-control" name="account" id="username" placeholder="username" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="password" class="control-label">Password</label>
+                            <div class="templatemo-input-icon-container">
+                                <i class="fa fa-lock"></i>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="password" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="imgAddr" class="control-label">Insert url of your personal image</label>
+                            <div class="templatemo-input-icon-container">
+                                <i class="fa fa-lock"></i>
+                                <input type="text" class="form-control" name="imgAddr" id="imgAddr" placeholder="insert url of your personal image" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input type="submit" value="signup" class="btn btn-warning" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <a href="/"><input type="button" value="Home" class="btn btn-warning" /></a>
+                        </div>
+                    </div>
+                    <div>
+                        <p th:text="${errmessage}"></p>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

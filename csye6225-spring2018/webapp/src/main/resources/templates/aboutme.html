@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<<<<<<< HEAD
+=======
+<div th:replace="fragments/header :: header"/>
+>>>>>>> assignment09
+<head>
+    <meta charset="UTF-8"/>
+    <title>Profile Page</title>
+</head>
+<body onload="load()">
+<script>
+    function fromptoinput(x)
+    {
+        document.getElementById("intro").value=x.innerHTML;
+        x.style.background="yellow";
+    }
+    function load()
+    {
+        document.getElementById("show").innerHTML=document.getElementById("translate").value;
+    }
+</script>
+<div >
+    <h2 th:text="${username}" style="text-align:center"></h2>
+</div>
+<<<<<<< HEAD
+=======
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+        <li>
+            <a href="/">Home</a>
+        </li>
+    </ul>
+</div>
+>>>>>>> assignment09
+<div>
+    <p id="show" th:maxlength="140" th:text="${introfromdb}" th:contenteditable="${introflag}" onblur="fromptoinput(this)"></p>
+    <input id="translate" type="hidden" th:value="${introfromdb}" />
+    <div th:if="${introflag}">
+        <form th:action="${username}" method="post">
+        <!--<textarea rows="8" name="intro" maxlength="140" th:placeholder="${introfromdb}"></textarea>-->
+        <input id="intro" type="hidden" name="intro" />
+        <input type="submit" value="confirm" />
+         </form>
+    </div>
+    <div>
+        <p th:text="${errmessage}"></p>
+    </div>
+</div>
+<<<<<<< HEAD
+</body>
+</html>
+=======
+<div th:replace="fragments/footer :: footer"/>
+</body>
+</html>
+>>>>>>> assignment09
